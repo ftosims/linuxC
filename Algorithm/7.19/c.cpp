@@ -3,6 +3,7 @@
 
 using namespace std;
 
+
 bool isChinese(char ch){
     int a;
     if (ch<0)
