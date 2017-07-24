@@ -3,7 +3,6 @@
 #include<unistd.h>
 #include<sys/types.h>
 #include<sys/stat.h>
-//#include<getopt.h>
 #include<string.h>
 #include<dirent.h>
 #include<grp.h>
@@ -14,13 +13,12 @@ static const char *optString = "halRp:";
 struct globalArgs_t{
     char *thepath;           //文件参数保存
     int isIta;               //a
-   // int isItr;               //r
+    // int isItr;               //r
     int isIth;               //h
     int hasPath;             //p
     int isItR;               //R
     int isItl;               //l
 } globalArgs ;
-
 
 void printfolderInformation();
 int printFilemore(char *path);
@@ -33,7 +31,6 @@ int main(int argc,char *argv[]){
     //初始化参数结构体
     globalArgs.isItl = 0;
     globalArgs.isIth = 0;
- //   globalArgs.isItr = 0;
     globalArgs.isItR = 0;
     globalArgs.isIta = 0;
     globalArgs.hasPath = 0;
@@ -50,9 +47,6 @@ int main(int argc,char *argv[]){
             globalArgs.isIth = 1;
             helpfunc();
             break;
-    //    case 'r':
-    //        globalArgs.isItr = 1;
-   //         break;
         case 'l':
             globalArgs.isItl = 1;
             break;
@@ -92,7 +86,6 @@ int main(int argc,char *argv[]){
 void
 printfolderInformation()
 {
-    printf(" .  ..  ");
     Printthemall(globalArgs.thepath);
 }
 void
@@ -153,7 +146,6 @@ int printFilemore(char *path)
     free(timeqwq);
 }
 
-
 void Printthemall( char *path )
 {
     DIR *d;
@@ -167,9 +159,6 @@ void Printthemall( char *path )
     while((file = readdir(d))!=NULL){
         sprintf(qwq, "%s/%s",path,file->d_name);
         if (globalArgs.isIta){
-            if (!strcmp(file->d_name, ".")
-                ||!strcmp(file->d_name, ".."))
-                continue;
         } else {
             if (strncmp(file->d_name, ".", 1)==0)
                 continue;
@@ -180,16 +169,10 @@ void Printthemall( char *path )
         printf("%s  ",file->d_name);
         if(globalArgs.isItl)
             printf("\n");
-        //if( lstat(file->d_name,&sb) >= 0 && S_ISDIR(sb.st_mode) && depth < globalArgs.depth){
-        //    printf("\n");
-        //    Printthemall(qwq, depth+1);
-        //    }
     }
     printf("\n");
     closedir(d);
 }
-
-
 
 void
 helpfunc()
@@ -211,9 +194,11 @@ recursiondir(char *path)
     }
     while((file = readdir(d))!=NULL){
         sprintf(qwq, "%s/%s",path,file->d_name);
-        if( !strcmp( file->d_name, ".")
-            || !strcmp( file->d_name, ".."))
-            continue;
+        if( globalArgs.isIta){
+        } else {
+            if ( !strncmp( file->d_name, ".", 1))
+                 continue;
+        }
         if( globalArgs.isItl)
             printFilemore(qwq);
         printf( "%s  ", file->d_name );
@@ -228,14 +213,18 @@ recursiondir(char *path)
     }
     while((file = readdir(d))!=NULL){
         sprintf(qwq, "%s/%s",path,file->d_name);
-        if( !strcmp( file->d_name, ".")
-            || !strcmp( file->d_name, ".."))
-            continue;
+        if( globalArgs.isIta){
+            if( !strcmp( file->d_name, ".")
+                || !strcmp( file->d_name, ".."))
+                continue;
+        } else {
+            if ( !strncmp( file->d_name, ".", 1))
+                continue;
+        }
         if( lstat(qwq, &sb ) >= 0 && S_ISDIR(sb.st_mode) ){
             printf("%s :\n", qwq);
             recursiondir(qwq);
         }
     }
     closedir(d);
-
 }
