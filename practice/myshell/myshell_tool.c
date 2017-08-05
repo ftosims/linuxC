@@ -26,7 +26,6 @@ typedef struct {
 COMMAND commands[] = {
     { "cd", com_cd, "Change to directory DIR" },
     { "help", com_help, "Display this text" },
-    { "?", com_help, "Synonym for `help'" },
     { "exit", com_quit, "Quit using Fileman" },
     { (char *)NULL, (rl_icpfunc_t *)NULL, (char *)NULL }
 };
@@ -407,6 +406,7 @@ com_cd(char *path)
 int
 com_help(char *path)
 {
+    printf("qwq没有什么特殊操作的啦emmmmm……\n");
     return 0;
 }
 int
@@ -415,6 +415,7 @@ com_quit(char *path)
     exit(0);
     return 0;
 }
+
 int
 my_gcwd()
 {
